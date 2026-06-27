@@ -1,6 +1,8 @@
 import { createRouter, RouterProvider } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 import './App.css'
+import { useEffect } from 'react';
+import { useAuthStore } from './stores/useAuthStore';
 
 const router = createRouter({ routeTree });
 
@@ -9,7 +11,14 @@ declare module '@tanstack/react-router' {
         router: typeof router
     }
 }
-function App() {
+const App = () => {
+    const initializeAuth = useAuthStore((state) => state.initializeAuth);
+
+    useEffect(() => {
+        const unsubscribe = initializeAuth();
+        return () => unsubscribe();
+    }, [initializeAuth]);
+
     return (
         <RouterProvider router={router} />
     )
