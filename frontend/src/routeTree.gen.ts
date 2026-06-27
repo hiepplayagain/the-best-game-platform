@@ -10,18 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DeveloperIndexRouteImport } from './routes/developer/index'
-import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as ProfileUserIdRouteImport } from './routes/profile/$userId'
 import { Route as GameGameSlugRouteImport } from './routes/game/$gameSlug'
-import { Route as DeveloperManageGamesRouteImport } from './routes/developer/manage-games'
-import { Route as DeveloperLayoutRouteImport } from './routes/developer/_layout'
-import { Route as AdminLayoutRouteImport } from './routes/admin/_layout'
+import { Route as AuthenticatedDeveloperIndexRouteImport } from './routes/_authenticated/developer/index'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedProfileUserIdRouteImport } from './routes/_authenticated/profile/$userId'
+import { Route as AuthenticatedDeveloperManageGamesRouteImport } from './routes/_authenticated/developer/manage-games'
+import { Route as AuthenticatedDeveloperLayoutRouteImport } from './routes/_authenticated/developer/_layout'
+import { Route as AuthenticatedAdminLayoutRouteImport } from './routes/_authenticated/admin/_layout'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -29,83 +34,89 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DeveloperIndexRoute = DeveloperIndexRouteImport.update({
-  id: '/developer/',
-  path: '/developer/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileUserIdRoute = ProfileUserIdRouteImport.update({
-  id: '/profile/$userId',
-  path: '/profile/$userId',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const GameGameSlugRoute = GameGameSlugRouteImport.update({
   id: '/game/$gameSlug',
   path: '/game/$gameSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DeveloperManageGamesRoute = DeveloperManageGamesRouteImport.update({
-  id: '/developer/manage-games',
-  path: '/developer/manage-games',
-  getParentRoute: () => rootRouteImport,
+const AuthenticatedDeveloperIndexRoute =
+  AuthenticatedDeveloperIndexRouteImport.update({
+    id: '/developer/',
+    path: '/developer/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const DeveloperLayoutRoute = DeveloperLayoutRouteImport.update({
-  id: '/developer/_layout',
-  path: '/developer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminLayoutRoute = AdminLayoutRouteImport.update({
-  id: '/admin/_layout',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const AuthenticatedProfileUserIdRoute =
+  AuthenticatedProfileUserIdRouteImport.update({
+    id: '/profile/$userId',
+    path: '/profile/$userId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDeveloperManageGamesRoute =
+  AuthenticatedDeveloperManageGamesRouteImport.update({
+    id: '/developer/manage-games',
+    path: '/developer/manage-games',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDeveloperLayoutRoute =
+  AuthenticatedDeveloperLayoutRouteImport.update({
+    id: '/developer/_layout',
+    path: '/developer',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAdminLayoutRoute =
+  AuthenticatedAdminLayoutRouteImport.update({
+    id: '/admin/_layout',
+    path: '/admin',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/admin': typeof AdminLayoutRoute
-  '/developer': typeof DeveloperLayoutRoute
-  '/developer/manage-games': typeof DeveloperManageGamesRoute
   '/game/$gameSlug': typeof GameGameSlugRoute
-  '/profile/$userId': typeof ProfileUserIdRoute
-  '/admin/': typeof AdminIndexRoute
-  '/developer/': typeof DeveloperIndexRoute
+  '/admin': typeof AuthenticatedAdminLayoutRoute
+  '/developer': typeof AuthenticatedDeveloperLayoutRoute
+  '/developer/manage-games': typeof AuthenticatedDeveloperManageGamesRoute
+  '/profile/$userId': typeof AuthenticatedProfileUserIdRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/developer/': typeof AuthenticatedDeveloperIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
-  '/admin': typeof AdminIndexRoute
-  '/developer': typeof DeveloperIndexRoute
-  '/developer/manage-games': typeof DeveloperManageGamesRoute
   '/game/$gameSlug': typeof GameGameSlugRoute
-  '/profile/$userId': typeof ProfileUserIdRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/developer': typeof AuthenticatedDeveloperIndexRoute
+  '/developer/manage-games': typeof AuthenticatedDeveloperManageGamesRoute
+  '/profile/$userId': typeof AuthenticatedProfileUserIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
-  '/admin/_layout': typeof AdminLayoutRoute
-  '/developer/_layout': typeof DeveloperLayoutRoute
-  '/developer/manage-games': typeof DeveloperManageGamesRoute
   '/game/$gameSlug': typeof GameGameSlugRoute
-  '/profile/$userId': typeof ProfileUserIdRoute
-  '/admin/': typeof AdminIndexRoute
-  '/developer/': typeof DeveloperIndexRoute
+  '/_authenticated/admin/_layout': typeof AuthenticatedAdminLayoutRoute
+  '/_authenticated/developer/_layout': typeof AuthenticatedDeveloperLayoutRoute
+  '/_authenticated/developer/manage-games': typeof AuthenticatedDeveloperManageGamesRoute
+  '/_authenticated/profile/$userId': typeof AuthenticatedProfileUserIdRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/developer/': typeof AuthenticatedDeveloperIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/game/$gameSlug'
     | '/admin'
     | '/developer'
     | '/developer/manage-games'
-    | '/game/$gameSlug'
     | '/profile/$userId'
     | '/admin/'
     | '/developer/'
@@ -113,34 +124,30 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/game/$gameSlug'
     | '/admin'
     | '/developer'
     | '/developer/manage-games'
-    | '/game/$gameSlug'
     | '/profile/$userId'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
     | '/auth'
-    | '/admin/_layout'
-    | '/developer/_layout'
-    | '/developer/manage-games'
     | '/game/$gameSlug'
-    | '/profile/$userId'
-    | '/admin/'
-    | '/developer/'
+    | '/_authenticated/admin/_layout'
+    | '/_authenticated/developer/_layout'
+    | '/_authenticated/developer/manage-games'
+    | '/_authenticated/profile/$userId'
+    | '/_authenticated/admin/'
+    | '/_authenticated/developer/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
-  AdminLayoutRoute: typeof AdminLayoutRoute
-  DeveloperLayoutRoute: typeof DeveloperLayoutRoute
-  DeveloperManageGamesRoute: typeof DeveloperManageGamesRoute
   GameGameSlugRoute: typeof GameGameSlugRoute
-  ProfileUserIdRoute: typeof ProfileUserIdRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-  DeveloperIndexRoute: typeof DeveloperIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -152,32 +159,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/developer/': {
-      id: '/developer/'
-      path: '/developer'
-      fullPath: '/developer/'
-      preLoaderRoute: typeof DeveloperIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/': {
-      id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile/$userId': {
-      id: '/profile/$userId'
-      path: '/profile/$userId'
-      fullPath: '/profile/$userId'
-      preLoaderRoute: typeof ProfileUserIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/game/$gameSlug': {
@@ -187,40 +180,79 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GameGameSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/developer/manage-games': {
-      id: '/developer/manage-games'
+    '/_authenticated/developer/': {
+      id: '/_authenticated/developer/'
+      path: '/developer'
+      fullPath: '/developer/'
+      preLoaderRoute: typeof AuthenticatedDeveloperIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/profile/$userId': {
+      id: '/_authenticated/profile/$userId'
+      path: '/profile/$userId'
+      fullPath: '/profile/$userId'
+      preLoaderRoute: typeof AuthenticatedProfileUserIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/developer/manage-games': {
+      id: '/_authenticated/developer/manage-games'
       path: '/developer/manage-games'
       fullPath: '/developer/manage-games'
-      preLoaderRoute: typeof DeveloperManageGamesRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedDeveloperManageGamesRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/developer/_layout': {
-      id: '/developer/_layout'
+    '/_authenticated/developer/_layout': {
+      id: '/_authenticated/developer/_layout'
       path: '/developer'
       fullPath: '/developer'
-      preLoaderRoute: typeof DeveloperLayoutRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedDeveloperLayoutRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/admin/_layout': {
-      id: '/admin/_layout'
+    '/_authenticated/admin/_layout': {
+      id: '/_authenticated/admin/_layout'
       path: '/admin'
       fullPath: '/admin'
-      preLoaderRoute: typeof AdminLayoutRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedAdminLayoutRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedAdminLayoutRoute: typeof AuthenticatedAdminLayoutRoute
+  AuthenticatedDeveloperLayoutRoute: typeof AuthenticatedDeveloperLayoutRoute
+  AuthenticatedDeveloperManageGamesRoute: typeof AuthenticatedDeveloperManageGamesRoute
+  AuthenticatedProfileUserIdRoute: typeof AuthenticatedProfileUserIdRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedDeveloperIndexRoute: typeof AuthenticatedDeveloperIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAdminLayoutRoute: AuthenticatedAdminLayoutRoute,
+  AuthenticatedDeveloperLayoutRoute: AuthenticatedDeveloperLayoutRoute,
+  AuthenticatedDeveloperManageGamesRoute:
+    AuthenticatedDeveloperManageGamesRoute,
+  AuthenticatedProfileUserIdRoute: AuthenticatedProfileUserIdRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  AuthenticatedDeveloperIndexRoute: AuthenticatedDeveloperIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
-  AdminLayoutRoute: AdminLayoutRoute,
-  DeveloperLayoutRoute: DeveloperLayoutRoute,
-  DeveloperManageGamesRoute: DeveloperManageGamesRoute,
   GameGameSlugRoute: GameGameSlugRoute,
-  ProfileUserIdRoute: ProfileUserIdRoute,
-  AdminIndexRoute: AdminIndexRoute,
-  DeveloperIndexRoute: DeveloperIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
