@@ -3,10 +3,26 @@ import { useAuthStore } from '../stores/useAuthStore';
 
 
 export const Route = createFileRoute('/_authenticated')({
-    beforeLoad: ({ location }) => {
-        const { user, loading } = useAuthStore.getState();
+    beforeLoad: async ({ location }) => {
 
-        if (loading) return;
+        const waitForAuthChecked = () => {
+            return new Promise<void>((resolve) => {
+                if (!useAuthStore.getState().loading) {
+                    return resolve;
+                }
+
+                const unsub = useAuthStore.subscribe((state) => {
+                    if (!state.loading) {
+                        unsub();
+                        resolve();
+                    }
+                });
+            });
+        }
+
+        await waitForAuthChecked();
+
+        const { user } = useAuthStore.getState();
 
         if (!user) {
             throw redirect({
